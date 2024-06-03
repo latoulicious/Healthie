@@ -135,4 +135,14 @@ class SiteController extends Controller
     {
         return $this->render('user');
     }
+
+    /**
+     * Displays User page.
+     *
+     * @return string
+     */
+    public function actionWilayah()
+    {
+        return $this->render('wilayah');
+    }
 }

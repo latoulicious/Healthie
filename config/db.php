@@ -2,9 +2,9 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'pgsql:host=roundhouse.proxy.rlwy.net;port=33407;dbname=railway',
+    'dsn' => 'pgsql:host=localhost;dbname=medikatest',
     'username' => 'postgres',
-    'password' => 'mOVKSkNfzACZOiiLZLnHBmFsBHHZVunp',
+    'password' => 'postgres',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)
