@@ -9,6 +9,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     public $password;
     public $authKey;
     public $accessToken;
+    public $role;
 
     private static $users = [
         '100' => [
@@ -17,34 +18,23 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
             'password' => 'admin',
             'authKey' => 'test100key',
             'accessToken' => '100-token',
+            'role' => 'admin', // Assign "admin" role
         ],
         '101' => [
             'id' => '101',
-            'username' => 'dokter',
-            'password' => 'dokter',
+            'username' => 'pegawai',
+            'password' => 'pegawai',
             'authKey' => 'test101key',
             'accessToken' => '101-token',
+            'role' => 'pegawai', // Assign "pegawai" role
         ],
         '102' => [
             'id' => '102',
-            'username' => 'perawat',
-            'password' => 'perawat',
-            'authKey' => 'test102key',
-            'accessToken' => '102-token',
-        ],
-        '103' => [
-            'id' => '103',
-            'username' => 'resepsionis',
-            'password' => 'resepsionis',
-            'authKey' => 'test103key',
-            'accessToken' => '103-token',
-        ],
-        '104' => [
-            'id' => '104',
             'username' => 'pasien',
             'password' => 'pasien',
-            'authKey' => 'test103key',
-            'accessToken' => '104-token',
+            'authKey' => 'test102key',
+            'accessToken' => '102-token',
+            'role' => 'pasien', // Assign "pasien" role
         ],
     ];
 
@@ -62,12 +52,8 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
+        // For development purposes, you can comment out this method if not using access tokens.
+        // You can also implement a basic search by access token in your hardcoded data.
         return null;
     }
 
@@ -81,10 +67,12 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     {
         foreach (self::$users as $user) {
             if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
+                $userObject = new static($user);
+                // Assign a role based on username for development purposes (optional)
+                $userObject->role = $userObject->username === 'admin' ? 'admin' : 'pegawai';
+                return $userObject;
             }
         }
-
         return null;
     }
 

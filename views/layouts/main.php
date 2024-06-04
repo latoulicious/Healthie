@@ -22,67 +22,98 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
+
 <head>
   <title><?= Html::encode($this->title) ?></title>
   <?php $this->head() ?>
 </head>
+
 <body class="d-flex flex-column h-100">
-<?php $this->beginBody() ?>
+  <?php $this->beginBody() ?>
 
-<header id="header">
-  <?php
-  NavBar::begin([
-    'brandLabel' => 'LOGO',
-    'brandUrl' => Yii::$app->homeUrl,
-    'options' => ['class' => 'navbar-right navbar-dark bg-dark fixed-top']
-  ]);
-  echo Nav::widget([
-    'options' => ['class' => 'navbar-nav'],
-    'items' => [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        !Yii::$app->user->isGuest ? ['label' => 'Transaksi', 'url' => ['/site/about']] : '',
-        !Yii::$app->user->isGuest ? ['label' => 'Informasi', 'url' => ['/site/users']] : '',
-        !Yii::$app->user->isGuest ? ['label' => 'Wilayah', 'url' => ['/wilayah/index']] : '',
-        !Yii::$app->user->isGuest ? ['label' => 'Pegawai', 'url' => ['/pegawai/index']] : '',
-        !Yii::$app->user->isGuest ? ['label' => 'Users', 'url' => ['/users/index']] : '',
-        !Yii::$app->user->isGuest ? ['label' => 'Tindakan', 'url' => ['/tindakan/index']] : '',
-        !Yii::$app->user->isGuest ? ['label' => 'Obat', 'url' => ['/obat/index']] : '',
-        Yii::$app->user->isGuest
-            ? ['label' => 'Login', 'url' => ['/site/login']]
+  <header id="header">
+    <?php
+    NavBar::begin([
+      'brandLabel' => 'LOGO',
+      'brandUrl' => (Yii::$app->user->isGuest) ? '/' : ['/dashboard'], // Conditional redirection
+      'options' => ['class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top']
+    ]);
+
+    if (!Yii::$app->user->isGuest) {
+      echo Nav::widget([
+        'options' => ['class' => 'navbar-nav ms-auto dropdown'], // Wrap remaining links in dropdown
+        'items' => [
+          // Conditional check for admin role and dropdown content
+          Yii::$app->user->identity->role === 'admin' ? [
+        'label' => 'Master Data', // Label for dropdown
+        'url' => '#', // Non-clickable dropdown toggle
+        'items' => [ // Nested dropdown items
+          ['label' => 'Wilayah', 'url' => ['/wilayah/index']],
+          ['label' => 'Pegawai', 'url' => ['/pegawai/index']],
+        ],
+      ] : '',
+          [
+            'label' => 'Transaksi', // Label for second dropdown (optional)
+            'url' => '#', // Non-clickable dropdown toggle (optional)
+            'items' => [ // Nested dropdown items (optional)
+              !Yii::$app->user->isGuest ? ['label' => 'Pasien', 'url' => ['/users/index']] : '',
+              !Yii::$app->user->isGuest ? ['label' => 'Tindakan', 'url' => ['/tindakan/index']] : '',
+              !Yii::$app->user->isGuest ? ['label' => 'Obat', 'url' => ['/obat/index']] : '',
+            ],
+          ],
+          [
+            'label' => 'Informasi', // Label for second dropdown (optional)
+            'url' => '#', // Non-clickable dropdown toggle (optional)
+            'items' => [ // Nested dropdown items (optional)
+              !Yii::$app->user->isGuest ? ['label' => 'Tagihan', 'url' => ['/users/index']] : '',
+            ],
+          ],
+          !Yii::$app->user->isGuest ? ['label' => 'Laporan', 'url' => ['/obat/index']] : '',
+          Yii::$app->user->isGuest
+            ? ['label' => 'Sign Up', 'url' => ['/site/login']]
             : '<li class="nav-item">'
-                . Html::beginForm(['/site/logout'])
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'nav-link btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-    ]
-]);
-  NavBar::end();
-  ?>
-</header>
+            . Html::beginForm(['/site/logout'])
+            . Html::submitButton(
+              'Logout',
+              ['class' => 'nav-link btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>'
+        ],
+      ]);
+    } else {
+      echo Nav::widget([
+        'options' => ['class' => 'navbar-nav ms-auto'],
+        'items' => [
+          Yii::$app->user->isGuest ? ['label' => 'Sign Up', 'url' => ['/site/login']] : '',
+        ],
+      ]);
+    }
 
-<main id="main" class="flex-shrink-0" role="main">
-  <div class="container">
-    <?php if (!empty($this->params['breadcrumbs'])): ?>
-      <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
-    <?php endif ?>
-    <?= Alert::widget() ?>
-    <?= $content ?>
-  </div>
-</main>
+    NavBar::end();
+    ?>
+  </header>
 
-<footer id="footer" class="mt-auto py-3 bg-light">
-  <div class="container">
-    <div class="row text-muted">
-      <div class="col-md-6 text-center text-md-start">&copy; Inova Medika Solusindo <?= date('Y') ?></div>
-      <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+  <main id="main" class="flex-shrink-0" role="main">
+    <div class="container">
+      <?php if (!empty($this->params['breadcrumbs'])) : ?>
+        <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
+      <?php endif ?>
+      <?= Alert::widget() ?>
+      <?= $content ?>
     </div>
-  </div>
-</footer>
+  </main>
 
-<?php $this->endBody() ?>
+  <footer id="footer" class="mt-auto py-3 bg-light">
+    <div class="container">
+      <div class="row text-muted">
+        <div class="col-md-6 text-center text-md-start">&copy; Healthie <?= date('Y') ?></div>
+      </div>
+    </div>
+  </footer>
+
+  <?php $this->endBody() ?>
 </body>
+
 </html>
 <?php $this->endPage() ?>
