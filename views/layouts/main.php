@@ -56,7 +56,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             'label' => 'Transaksi', // Label for second dropdown (optional)
             'url' => '#', // Non-clickable dropdown toggle (optional)
             'items' => [ // Nested dropdown items (optional)
-              !Yii::$app->user->isGuest ? ['label' => 'Pasien', 'url' => ['/users/index']] : '',
+              !Yii::$app->user->isGuest ? ['label' => 'Pasien', 'url' => ['/pasien/index']] : '',
               !Yii::$app->user->isGuest ? ['label' => 'Tindakan', 'url' => ['/tindakan/index']] : '',
               !Yii::$app->user->isGuest ? ['label' => 'Obat', 'url' => ['/obat/index']] : '',
             ],
@@ -65,10 +65,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             'label' => 'Informasi', // Label for second dropdown (optional)
             'url' => '#', // Non-clickable dropdown toggle (optional)
             'items' => [ // Nested dropdown items (optional)
-              !Yii::$app->user->isGuest ? ['label' => 'Tagihan', 'url' => ['/users/index']] : '',
+              !Yii::$app->user->isGuest ? ['label' => 'Tagihan', 'url' => ['/tagihan']] : '',
             ],
           ],
-          !Yii::$app->user->isGuest ? ['label' => 'Laporan', 'url' => ['/obat/index']] : '',
+          !Yii::$app->user->isGuest ? ['label' => 'Laporan', 'url' => ['/laporan']] : '',
           Yii::$app->user->isGuest
             ? ['label' => 'Sign Up', 'url' => ['/site/login']]
             : '<li class="nav-item">'
