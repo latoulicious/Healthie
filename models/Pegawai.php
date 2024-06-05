@@ -14,8 +14,6 @@ use Yii;
  * @property string $departemen
  * @property string|null $alamat
  * @property string|null $no_telepon
- * @property string|null $created_at
- * @property string|null $updated_at
  */
 class Pegawai extends \yii\db\ActiveRecord
 {
@@ -35,7 +33,6 @@ class Pegawai extends \yii\db\ActiveRecord
         return [
             [['nama_lengkap', 'nip', 'jabatan', 'departemen'], 'required'],
             [['alamat'], 'string'],
-            [['created_at', 'updated_at'], 'safe'],
             [['nama_lengkap'], 'string', 'max' => 255],
             [['nip', 'no_telepon'], 'string', 'max' => 20],
             [['jabatan', 'departemen'], 'string', 'max' => 50],
@@ -56,8 +53,6 @@ class Pegawai extends \yii\db\ActiveRecord
             'departemen' => 'Departemen',
             'alamat' => 'Alamat',
             'no_telepon' => 'No Telepon',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
         ];
     }
 }
